@@ -16,8 +16,8 @@ spec:
         tier: node
     spec:
       #Enable node selector in case you need to run on specific node pool
-      #nodeSelector:
-      #  agentpool: default02
+      nodeSelector:
+        "kubernetes.io/os": linux
       containers:
       - command:
         - nsenter
