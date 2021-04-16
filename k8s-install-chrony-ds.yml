@@ -74,6 +74,7 @@ spec:
           echo "# Settings come from: https://docs.microsoft.com/en-us/azure/virtual-machines/linux/time-sync" >> /etc/chrony/chrony.conf
           echo "refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0" >> /etc/chrony/chrony.conf
           echo "makestep 1.0 -1" >> /etc/chrony/chrony.conf
+          systemctl restart chrony
           while true; do sleep 100000; done
         image: alpine
         imagePullPolicy: IfNotPresent
