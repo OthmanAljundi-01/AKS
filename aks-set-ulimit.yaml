@@ -32,7 +32,7 @@ spec:
         - sh
         - -c
         - |
-		  if cat /etc/default/kubelet | grep -q 'allowed-unsafe-sysctls';then
+	  if cat /etc/default/kubelet | grep -q 'allowed-unsafe-sysctls';then
           echo "unsafe sysctls are already allowed"
           else
           sed -i "s/KUBELET_CONFIG=/KUBELET_CONFIG=--allowed-unsafe-sysctls 'net.core.*' /g" /etc/default/kubelet
