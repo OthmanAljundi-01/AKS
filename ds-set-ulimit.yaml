@@ -3,7 +3,7 @@ kind: DaemonSet
 metadata:
   labels:
     component: ds-set-ulimit
-  name: install-chrony
+  name: ds-set-ulimit
 spec:
   selector:
     matchLabels:
