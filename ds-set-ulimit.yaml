@@ -40,7 +40,7 @@ spec:
           systemctl restart kubelet
           echo "unsafe sysctls are allowed"
           fi      
-          sysctl -w fs.file-max=100000;
+          sysctl -w fs.file-max=65535;
           while true; do sleep 100000; done
         image: alpine
         imagePullPolicy: IfNotPresent
