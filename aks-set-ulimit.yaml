@@ -2,17 +2,17 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
-    component: install-chrony
+    component: ds-set-ulimit
   name: install-chrony
 spec:
   selector:
     matchLabels:
-      component: install-chrony
+      component: ds-set-ulimit
       tier: node
   template:
     metadata:
       labels:
-        component: install-chrony
+        component: ds-set-ulimit
         tier: node
     spec:
       #Enable node selector in case you need to run on specific node pool
