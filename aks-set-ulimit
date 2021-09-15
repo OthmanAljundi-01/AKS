@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    component: install-chrony
+  name: install-chrony
+spec:
+  selector:
+    matchLabels:
+      component: install-chrony
+      tier: node
+  template:
+    metadata:
+      labels:
+        component: install-chrony
+        tier: node
+    spec:
+      #Enable node selector in case you need to run on specific node pool
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - command:
+        - nsenter
+        - --target
+        - "1"
+        - --mount
+        - --uts
+        - --ipc
+        - --net
+        - --pid
+        - --
+        - sh
+        - -c
+        - |
+		  if cat /etc/default/kubelet | grep -q 'allowed-unsafe-sysctls';then
+          echo "unsafe sysctls are already allowed"
+          else
+          sed -i "s/KUBELET_CONFIG=/KUBELET_CONFIG=--allowed-unsafe-sysctls 'net.core.*' /g" /etc/default/kubelet
+          systemctl daemon-reload
+          systemctl restart kubelet
+          echo "unsafe sysctls are allowed"
+          fi      
+          sysctl -w fs.file-max=100000;
+          while true; do sleep 100000; done
+        image: alpine
+        imagePullPolicy: IfNotPresent
+        name: sysctl-patch
+        resources:
+          requests:
+            cpu: 10m
+        securityContext:
+          privileged: true
+      dnsPolicy: ClusterFirst
+      hostPID: true
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      restartPolicy: Always
+  updateStrategy:
+    type: RollingUpdate
